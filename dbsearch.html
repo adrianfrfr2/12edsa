@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ecl1pse.lat | Database Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6e48aa;
+            --primary-dark: #4b2d7f;
+            --secondary: #9d50bb;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #e0e0e0;
+            --lighter: #f5f5f5;
+            --gray: #333333;
+            --gray-light: #444444;
+            --yellow: #ffcc00;
+            --yellow-dark: #e6b800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--gray);
+            background-color: var(--darker);
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        .logo h2 {
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--light);
+        }
+
+        .search-container {
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: none;
+            background-color: var(--gray);
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            box-shadow: 0 0 0 2px var(--primary);
+            background-color: var(--gray-light);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light);
+            cursor: pointer;
+        }
+
+        .results-container {
+            margin: 40px 0;
+        }
+
+        .file-results {
+            margin-bottom: 40px;
+        }
+
+        .file-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .file-name {
+            font-size: 18px;
+            color: var(--primary);
+            margin-right: 15px;
+        }
+
+        .match-count {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .results-table th {
+            background-color: var(--gray-light);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .results-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .results-table tr:hover {
+            background-color: var(--gray);
+        }
+
+        .highlight {
+            background-color: rgba(255, 204, 0, 0.3);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--light);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: var(--light);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 25px;
+            border-radius: 5px;
+            background-color: var(--yellow);
+            color: var(--dark);
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .notification i {
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .notification {
+                width: 90%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>ecl1pse.lat</h1>
+                    <h2>Database Search</h2>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search across all user files...">
+            <i class="fas fa-search search-icon" id="searchButton"></i>
+        </div>
+
+        <div id="resultsContainer" class="results-container">
+            <div class="loading" id="loadingIndicator">
+                <i class="fas fa-spinner fa-spin"></i> Loading user database...
+            </div>
+            <div id="searchResults"></div>
+        </div>
+    </main>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-info-circle"></i>
+        <span id="notificationText"></span>
+    </div>
+
+    <script>
+        // DOM elements
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const searchResults = document.getElementById('searchResults');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notificationText');
+
+        // CSV files in the database folder (updated to match your files)
+        const csvFiles = [
+            'database/users.csv',
+            'database/users_part_1.csv',
+            'database/users_part_2.csv',
+            'database/users_part_3.csv',
+            'database/users_part_4.csv',
+            'database/users_part_5.csv',
+            'database/users_part_6.csv',
+            'database/users_part_7.csv',
+            'database/users_part_8.csv',
+            'database/users_part_10.csv',
+            'database/users_part_11.csv',
+            'database/users_part_12.csv',
+            'database/users_part_13.csv'
+        ];
+
+        // Show notification
+        function showNotification(message, duration = 3000) {
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            if (duration > 0) {
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, duration);
+            }
+        }
+
+        // Highlight search term in text
+        function highlightText(text, searchTerm) {
+            if (!searchTerm) return text;
+            const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        // Escape special regex characters
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        // Load and parse CSV file
+        async function loadCSV(filePath) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) throw new Error('File not found');
+                const csvData = await response.text();
+                return parseCSV(csvData);
+            } catch (error) {
+                console.error(`Error loading ${filePath}:`, error);
+                return null;
+            }
+        }
+
+        // Parse CSV data
+        function parseCSV(csvData) {
+            const lines = csvData.split('\n');
+            if (lines.length < 2) return null;
+            
+            const headers = lines[0].split(',').map(h => h.trim());
+            const rows = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                if (values.length === headers.length) {
+                    const row = {};
+                    headers.forEach((header, index) => {
+                        row[header] = values[index].trim();
+                    });
+                    rows.push(row);
+                }
+            }
+            
+            return { headers, rows };
+        }
+
+        // Search CSV data for the term
+        function searchCSV(data, searchTerm) {
+            if (!data || !searchTerm) return [];
+            
+            const results = [];
+            const searchLower = searchTerm.toLowerCase();
+            
+            data.rows.forEach(row => {
+                let matchFound = false;
+                const matchedRow = {};
+                
+                data.headers.forEach(header => {
+                    const cellValue = row[header] || '';
+                    if (cellValue.toLowerCase().includes(searchLower)) {
+                        matchFound = true;
+                        matchedRow[header] = highlightText(cellValue, searchTerm);
+                    } else {
+                        matchedRow[header] = cellValue;
+                    }
+                });
+                
+                if (matchFound) {
+                    results.push(matchedRow);
+                }
+            });
+            
+            return results;
+        }
+
+        // Display search results
+        function displayResults(resultsByFile, searchTerm) {
+            searchResults.innerHTML = '';
+            
+            if (!searchTerm) {
+                searchResults.innerHTML = '<div class="no-results">Enter a search term to begin</div>';
+                return;
+            }
+            
+            let totalMatches = 0;
+            let filesWithMatches = 0;
+            
+            // Process each file's results
+            Object.entries(resultsByFile).forEach(([filePath, fileData]) => {
+                const { data, results } = fileData;
+                if (!data || results.length === 0) return;
+                
+                totalMatches += results.length;
+                filesWithMatches++;
+                
+                const fileDisplayName = filePath.split('/').pop();
+                
+                const fileResultsDiv = document.createElement('div');
+                fileResultsDiv.className = 'file-results';
+                fileResultsDiv.innerHTML = `
+                    <div class="file-header">
+                        <div class="file-name">${fileDisplayName}</div>
+                        <div class="match-count">${results.length} match${results.length !== 1 ? 'es' : ''}</div>
+                    </div>
+                `;
+                
+                const table = document.createElement('table');
+                table.className = 'results-table';
+                
+                // Create table header
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                data.headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+                
+                // Create table body
+                const tbody = document.createElement('tbody');
+                results.forEach(result => {
+                    const row = document.createElement('tr');
+                    data.headers.forEach(header => {
+                        const td = document.createElement('td');
+                        td.innerHTML = result[header] || '';
+                        row.appendChild(td);
+                    });
+                    tbody.appendChild(row);
+                });
+                table.appendChild(tbody);
+                
+                fileResultsDiv.appendChild(table);
+                searchResults.appendChild(fileResultsDiv);
+            });
+            
+            if (filesWithMatches === 0) {
+                searchResults.innerHTML = `<div class="no-results">No user matches found for "${searchTerm}"</div>`;
+            } else {
+                showNotification(`Found ${totalMatches} user matches across ${filesWithMatches} files`, 3000);
+            }
+        }
+
+        // Perform the search
+        async function performSearch(searchTerm) {
+            if (!searchTerm.trim()) {
+                displayResults({}, '');
+                return;
+            }
+            
+            loadingIndicator.style.display = 'block';
+            searchResults.innerHTML = '';
+            
+            const resultsByFile = {};
+            
+            try {
+                // Process each CSV file
+                for (const filePath of csvFiles) {
+                    const data = await loadCSV(filePath);
+                    if (data) {
+                        const results = searchCSV(data, searchTerm);
+                        resultsByFile[filePath] = { data, results };
+                    }
+                }
+                
+                displayResults(resultsByFile, searchTerm);
+            } catch (error) {
+                console.error('Search error:', error);
+                showNotification('An error occurred during search', 3000);
+                searchResults.innerHTML = `<div class="no-results">Error: ${error.message}</div>`;
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        // Event listeners
+        searchButton.addEventListener('click', () => {
+            performSearch(searchInput.value.trim());
+        });
+        
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                performSearch(searchInput.value.trim());
+            }
+        });
+
+        // Initial load - show empty state
+        loadingIndicator.style.display = 'none';
+        searchResults.innerHTML = '<div class="no-results">Enter a search term to search user database</div>';
+    </script>
+</body>
+</html>

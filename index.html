@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ecl1pse.lat | Free APIs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ecl1pse.lat/">
+    <meta property="og:title" content="ecl1pse.lat | APIs & Leak Data Search">
+    <meta property="og:description" content="Search over Restorecord Database with over 1,685,122 entries.">
+    <meta property="og:image" content="https://cdn.discordapp.com/attachments/1385965834505027604/1400037899444949093/lat.jpg?ex=688b2e66&is=6889dce6&hm=a17c4916334da57be16dacab28c3351b7c77c785eda0afadc76773940c13d6e2&">
+    <style>
+        :root {
+            --primary: #6e48aa;
+            --primary-dark: #4b2d7f;
+            --secondary: #9d50bb;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #e0e0e0;
+            --lighter: #f5f5f5;
+            --gray: #333333;
+            --gray-light: #444444;
+            --yellow: #ffcc00;
+            --yellow-dark: #e6b800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--gray);
+            background-color: var(--darker);
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        .logo h2 {
+            font-size: 16px;
+            font-weight: 300;
+            color: var(--light);
+        }
+
+        .search-container {
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 30px;
+            border: none;
+            background-color: var(--gray);
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            box-shadow: 0 0 0 2px var(--primary);
+            background-color: var(--gray-light);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light);
+            cursor: pointer;
+        }
+
+        .api-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .api-card {
+            background-color: var(--gray);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .api-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .api-name {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .api-description {
+            margin-bottom: 15px;
+            color: var(--lighter);
+        }
+
+        .api-link a {
+            color: var(--secondary);
+            text-decoration: none;
+            word-break: break-all;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .api-link a:hover {
+            text-decoration: underline;
+        }
+
+        .api-category {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .category-api {
+            background-color: rgba(110, 72, 170, 0.2);
+            color: var(--primary);
+        }
+
+        .category-api-key {
+            background-color: rgba(157, 80, 187, 0.2);
+            color: var(--secondary);
+        }
+
+        .category-oauth {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .api-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background-color: var(--gray-light);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--light);
+        }
+
+        .add-api-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(110, 72, 170, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-api-btn:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: var(--darker);
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid var(--gray);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--light);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: var(--gray);
+            border: 1px solid var(--gray-light);
+            border-radius: 5px;
+            color: var(--light);
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .submit-btn:disabled {
+            background-color: var(--gray-light);
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--light);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: var(--light);
+            grid-column: 1 / -1;
+        }
+
+        .form-loading {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+            color: var(--primary);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 25px;
+            border-radius: 5px;
+            background-color: var(--yellow);
+            color: var(--dark);
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .notification i {
+            font-size: 18px;
+        }
+
+        .cooldown-timer {
+            margin-left: 5px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .api-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .notification {
+                width: 90%;
+                text-align: center;
+            }
+        }
+
+        .top-right-button {
+            position: fixed; /* or 'absolute' if you prefer */
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #9d50bb; /* Green background */
+            color: white; /* White text */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+.top-right-button:hover {
+  background-color: #3c0547; /* Darker green on hover */
+}
+    </style>
+</head>
+<button class="top-right-button" onclick="window.location.href='dbsearch.html';">
+  Database Search
+</button>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>ecl1pse.lat</h1>
+                    <h2>Free APIs</h2>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search APIs...">
+            <i class="fas fa-search search-icon" id="searchButton"></i>
+        </div>
+
+        <div id="apiList" class="api-list">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading APIs...
+            </div>
+        </div>
+    </main>
+
+    <button id="addApiBtn" class="add-api-btn">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <div id="apiModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New API</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="apiForm">
+                <div class="form-group">
+                    <label for="apiName">Name</label>
+                    <input type="text" id="apiName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="apiDescription">Description</label>
+                    <textarea id="apiDescription" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="apiLink">API Link</label>
+                    <input type="url" id="apiLink" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="apiCategory">Category</label>
+                    <select id="apiCategory" class="form-control" required>
+                        <option value="api">API</option>
+                        <option value="api key">API Key</option>
+                        <option value="oauth">OAuth</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="apiTags">Tags (comma separated)</label>
+                    <input type="text" id="apiTags" class="form-control" placeholder="e.g., weather,finance,data">
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">Submit API</button>
+                <div class="form-loading" id="formLoading">
+                    <i class="fas fa-spinner fa-spin"></i> Uploading...
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-clock"></i>
+        <span id="notificationText">Did you just tried to spam? Hell naw.💀</span>
+        <span class="cooldown-timer" id="cooldownTimer">10</span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPUDD9_mWzY2EbS0hP0K-SX6Z0D45bQXI",
+            authDomain: "ecl1pse-lat.firebaseapp.com",
+            databaseURL: "ecl1pse-lat.firebaseapp.com",
+            projectId: "ecl1pse-lat",
+            storageBucket: "ecl1pse-lat.firebasestorage.app",
+            messagingSenderId: "725321920347",
+            appId: "1:725321920347:web:8755b0cf29c02a6ebab47e"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // DOM elements
+        const apiList = document.getElementById('apiList');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const addApiBtn = document.getElementById('addApiBtn');
+        const apiModal = document.getElementById('apiModal');
+        const closeModal = document.querySelector('.close-modal');
+        const apiForm = document.getElementById('apiForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formLoading = document.getElementById('formLoading');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notificationText');
+        const cooldownTimer = document.getElementById('cooldownTimer');
+
+        // Cooldown state
+        let isOnCooldown = false;
+        let cooldownInterval = null;
+        let lastSubmissionTime = 0;
+        const COOLDOWN_DURATION = 10; // 10 seconds
+
+        // Real-time listener reference
+        let unsubscribe = null;
+
+        // Render API card
+        function renderApiCard(api) {
+            const categoryClass = api.category === 'api key' ? 'category-api-key' : 
+                                api.category === 'oauth' ? 'category-oauth' : 'category-api';
+            
+            const tags = api.tags ? api.tags.split(',').map(tag => tag.trim()) : [];
+            
+            const apiCard = document.createElement('div');
+            apiCard.className = 'api-card';
+            apiCard.innerHTML = `
+                <h3 class="api-name">${api.name}</h3>
+                <div class="api-category ${categoryClass}">${api.category}</div>
+                <p class="api-description">${api.description}</p>
+                <div class="api-link">
+                    <a href="${api.api_link}" target="_blank">${api.api_link}</a>
+                </div>
+                ${tags.length > 0 ? `
+                <div class="api-tags">
+                    ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
+                ` : ''}
+            `;
+            
+            return apiCard;
+        }
+
+        // Show notification
+        function showNotification(message, duration = 3000) {
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            if (duration > 0) {
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, duration);
+            }
+        }
+
+        // Hide notification
+        function hideNotification() {
+            notification.classList.remove('show');
+        }
+
+        // Start cooldown timer
+        function startCooldown() {
+            isOnCooldown = true;
+            lastSubmissionTime = Date.now();
+            submitBtn.disabled = true;
+            
+            let secondsLeft = COOLDOWN_DURATION;
+            cooldownTimer.textContent = secondsLeft;
+            showNotification("Please wait before submitting another API", 0);
+            
+            cooldownInterval = setInterval(() => {
+                secondsLeft--;
+                cooldownTimer.textContent = secondsLeft;
+                
+                if (secondsLeft <= 0) {
+                    clearInterval(cooldownInterval);
+                    isOnCooldown = false;
+                    submitBtn.disabled = false;
+                    hideNotification();
+                }
+            }, 1000);
+        }
+
+        // Fetch and display APIs in real-time
+        function fetchAPIs(searchTerm = '') {
+            apiList.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading APIs...</div>';
+
+            // Unsubscribe from previous listener if exists
+            if (unsubscribe) unsubscribe();
+
+            // Set up real-time listener
+            unsubscribe = db.collection("apis")
+                .orderBy("createdAt", "desc")
+                .onSnapshot((querySnapshot) => {
+                    apiList.innerHTML = '';
+
+                    if (querySnapshot.empty) {
+                        apiList.innerHTML = '<div class="no-results">No APIs found in the database.</div>';
+                        return;
+                    }
+
+                    let hasResults = false;
+                    const fragment = document.createDocumentFragment();
+
+                    querySnapshot.forEach((doc) => {
+                        const api = doc.data();
+                        
+                        // Client-side search filtering
+                        if (searchTerm) {
+                            const searchMatch = 
+                                api.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                api.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                (api.tags && api.tags.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                                api.category.toLowerCase().includes(searchTerm.toLowerCase());
+
+                            if (!searchMatch) return;
+                        }
+
+                        hasResults = true;
+                        const apiCard = renderApiCard(api);
+                        fragment.appendChild(apiCard);
+                    });
+
+                    apiList.appendChild(fragment);
+
+                    if (!hasResults) {
+                        apiList.innerHTML = '<div class="no-results">No APIs match your search.</div>';
+                    }
+                }, (error) => {
+                    apiList.innerHTML = `<div class="no-results">Error loading APIs: ${error.message}</div>`;
+                    console.error("Firestore error:", error);
+                });
+        }
+
+        // Search functionality
+        function handleSearch() {
+            const searchTerm = searchInput.value.trim();
+            fetchAPIs(searchTerm);
+        }
+
+        searchButton.addEventListener('click', handleSearch);
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
+        });
+
+        // Modal functionality
+        addApiBtn.addEventListener('click', () => {
+            apiModal.style.display = 'block';
+        });
+
+        closeModal.addEventListener('click', () => {
+            apiModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === apiModal) {
+                apiModal.style.display = 'none';
+            }
+        });
+
+        // Form submission
+        apiForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (isOnCooldown) {
+                showNotification("Please wait before submitting another API");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            formLoading.style.display = 'block';
+
+            try {
+                await db.collection("apis").add({
+                    name: apiName.value.trim(),
+                    description: apiDescription.value.trim(),
+                    api_link: apiLink.value.trim(),
+                    category: apiCategory.value,
+                    tags: apiTags.value.trim(),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                apiForm.reset();
+                apiModal.style.display = 'none';
+                showNotification("API submitted successfully!");
+                startCooldown();
+            } catch (error) {
+                console.error("Full error:", error);
+                showNotification(`Error: ${error.message}`);
+            } finally {
+                submitBtn.disabled = isOnCooldown;
+                formLoading.style.display = 'none';
+            }
+        });
+
+        // Initial fetch
+        fetchAPIs();
+    </script>
+</body>
+</html>
